@@ -1,4 +1,5 @@
-import { createContext, useState } from "react"
+import { createContext, useState, useEffect } from "react"
+import { toast } from 'react-toastify'
 import { categorias as categoriasDB } from '../data/categorias'
 
 const KioscoContext = createContext();
@@ -16,6 +17,14 @@ const KioscoProvider = ({children}) => {
     const [ modal, setModal ] = useState(false)
     const [ producto, setProducto ] = useState({})
 
+    const [ pedido, setPedido ] = useState([])
+    const [ total, setTotal ] = useState(0)
+
+    useEffect(() => {
+        const nuevoTotal = pedido.reduce( (total, producto) => ( producto.precio * producto.cantidad ) + total, 0 )
+        setTotal(nuevoTotal)
+    }, [pedido])
+
     const handleSetProducto = producto => {
         setProducto(producto)
         // console.log(producto);
@@ -32,6 +41,38 @@ const KioscoProvider = ({children}) => {
         setModal(!modal)
     }
 
+    // Eliminando campos que no ocupamos {categoria_id, imagen, ...producto}
+    const handleAgregarPedido = ({categoria_id, ...producto}) => {
+        // console.log(producto);
+        
+        if (pedido.some( pedidoState => pedidoState.id === producto.id)) {
+            // console.log('Si esta en el pedido');
+            const pedidoActualizado = pedido.map( pedidoState => pedidoState.id === producto.id ?
+            producto : pedidoState )
+            setPedido(pedidoActualizado)
+            toast.success('Guardado correctamente');
+            // setEdicion(true)
+        } else {
+            setPedido([...pedido, producto])
+            toast.success('Agregado al pedido');
+        }
+    }
+
+    const handleEditarCantidad = id => {
+        // console.log(id);
+        const productoAtualizar = pedido.filter( producto => producto.id === id)[0];
+        setProducto(productoAtualizar)
+        setModal(!modal)
+    }
+
+    const handleEliminarProductoPedido = id => {
+        const pedidoActualizado = pedido.filter( producto => producto.id !== id)
+        setPedido(pedidoActualizado)
+        toast.success('Eliminado del pedio')
+    }
+
+    // const handle
+
     return (
         <KioscoContext.Provider
             value={{
@@ -41,7 +82,12 @@ const KioscoProvider = ({children}) => {
                 modal,
                 handleClickModal,
                 producto,
-                handleSetProducto
+                handleSetProducto,
+                pedido,
+                handleAgregarPedido,
+                handleEditarCantidad,
+                handleEliminarProductoPedido,
+                total
             }}
         >{children}</KioscoContext.Provider>
     )

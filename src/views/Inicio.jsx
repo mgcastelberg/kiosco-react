@@ -17,9 +17,17 @@ export default function Inicio() {
 
   return (
     <>
-        <h1 className=' text-4xl font-bold'>{ categoriaActual.nombre }</h1>
-        <p className=' text-2xl my-10'>
-            Elije y perzonaliza tu pedido a continuación.
+        <div className='w-full flex items-center mt-3bg-slate-50 mt-3'>
+            <img src={`/img/icono_${categoriaActual.icono}.svg`} alt="Imagen icono"
+                className=' w-8 h-8'
+            />
+            <h1 className=' flex-1 text-3xl font-black ml-3'>
+                { categoriaActual.nombre }
+            </h1>
+        </div>
+
+        <p className=' text-xl my-4'>
+            Elije y personaliza tu pedido a continuación.
         </p>
         <div className='grid gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-3'>
             { productos.map( producto => (
