@@ -32,25 +32,26 @@ export default function Resumen() {
         )}
       </div>
 
-      <p className='text-xl mt-10'>
-          Total: {''}
-          { formatearDinero(total) }
-      </p>
+      {/* <div className=' absolute bottom-0 pb-3 bg-slate-200 w-64'> */}
+        <p className='text-xl mt-3'>
+            Total: {''}
+            { formatearDinero(total) }
+        </p>
 
-      <form 
-        action=""
-        className='w-full'
-      >
-        <div className='pt-3'>
-          <input 
-            type="submit"
-            className={`${comprobarPedido() ? 'bg-indigo-200' : 'bg-indigo-600 hover:bg-indigo-800'}  px-5 py-2 rounded 
-                      uppercase font-bold text-white text-ceter w-full`}
-            value={'confirmar pedido'}
-            disabled={comprobarPedido()}
-          />
-        </div>
-      </form>
+        <form 
+          className='w-full pb-5'
+        >
+          <div className='pt-3'>
+            <input 
+              type="submit"
+              className={`${comprobarPedido() ? 'bg-indigo-200' : 'bg-indigo-600 hover:bg-indigo-800'}  px-5 py-2 rounded 
+                        uppercase font-bold text-white text-ceter w-full`}
+              value={'confirmar pedido'}
+              disabled={comprobarPedido()}
+            />
+          </div>
+        </form>
+      {/* </div> */}
 
     </aside>
   )

@@ -1,14 +1,42 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import {createRef, useState} from 'react'
+import { Link } from "react-router-dom";
+import Alerta from '../components/Alerta';
+import { useAuth } from '../hooks/useAuth';
+
 
 export default function Login() {
+
+    const emailRef = createRef();
+    const passwordRef = createRef();
+
+    const [errores, setErrores] = useState([]);
+    const { login } = useAuth({
+        middleware: 'guest',
+        url: '/'
+    });
+
+    const handleSubmit = async e => {
+        e.preventDefault();
+        const datos = {
+            email: emailRef.current.value,
+            password: passwordRef.current.value
+        }
+        login(datos, setErrores);
+    }
+
   return (
     <> 
         <h1 className='text-4xl font-black'>Iniciar sesión</h1>
         <p>Para crear un pedido debes iniciar sesión</p>
 
         <div className=' bg-white rounded-md mt-4 px-5 py-7 shadow-md'>
-            <form action="">
+            <form
+                onSubmit={handleSubmit}
+                noValidate
+            >
+
+                {errores ? errores.map((error, i) => <Alerta key={i}>{error}</Alerta>) : null }
 
                 <div className=' mb-4'>
                     <label 
@@ -22,6 +50,7 @@ export default function Login() {
                         name="email"
                         className="mt-2 w-full p-3 bg-gray-50 rounded-sm"
                         placeholder="Tu email"
+                        ref={emailRef}
                     />
                 </div>
 
@@ -37,6 +66,7 @@ export default function Login() {
                         name="password"
                         className="mt-2 w-full p-3 bg-gray-50 rounded-sm"
                         placeholder="Tu password"
+                        ref={passwordRef}
                     />
                 </div>
 

@@ -90,7 +90,6 @@ const KioscoProvider = ({children}) => {
         toast.success('Eliminado del pedio')
     }
 
-    // const handle
 
     return (
         <KioscoContext.Provider

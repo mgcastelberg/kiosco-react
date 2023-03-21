@@ -10,6 +10,8 @@ import Resumen from '../components/Resumen';
 
 import useKiosco from '../hooks/useKiosco';
 import ModalProducto from '../components/ModalProducto';
+// para proteger todas las rutas
+import { useAuth } from '../hooks/useAuth';
 
 const customStyles = {
   content: {
@@ -27,8 +29,12 @@ Modal.setAppElement('#root')
 
 export default function Layout() {
 
+  const {user, error} = useAuth({middleware: 'auth'});
   const { modal, handleClickModal } = useKiosco();
   // console.log(modal);
+
+  // console.log(user);
+  // console.log(error);
 
   return (
     <>
