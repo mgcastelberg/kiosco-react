@@ -2,11 +2,18 @@ import React from 'react'
 import useKiosco from '../hooks/useKiosco'
 import ResumenProducto from './ResumenProducto';
 import { formatearDinero } from '../helpers';
+import { useAuth } from "../hooks/useAuth";
 
 export default function Resumen() {
 
-  const {pedido, total} = useKiosco();
+  const {pedido, total, handleSubmitNuevaOrden} = useKiosco();
+  const { logout } = useAuth({});
+
   const comprobarPedido = () => pedido.length === 0; //return true/false
+  const handleSubmit = e => {
+    e.preventDefault();
+    handleSubmitNuevaOrden( logout );
+  }
 
   return (
     <aside className='w-72 h-screen overflow-y-scroll p-3'>
@@ -40,6 +47,7 @@ export default function Resumen() {
 
         <form 
           className='w-full pb-5'
+          onSubmit={handleSubmit}
         >
           <div className='pt-3'>
             <input 

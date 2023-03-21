@@ -90,6 +90,38 @@ const KioscoProvider = ({children}) => {
         toast.success('Eliminado del pedio')
     }
 
+    const handleSubmitNuevaOrden = async (logout) => {
+        try {
+            const token = localStorage.getItem('AUTH_TOKEN');
+            const { data } = await clienteAxios.post('/api/pedidos', 
+            {
+                total,
+                productos: pedido.map( producto => {
+                    return {
+                        id: producto.id,
+                        cantidad: producto.cantidad
+                    }
+                 }),
+            },{
+                headers:{
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            toast.success(data.message);
+            setTimeout(() => {
+                setPedido([])
+            }, 1000);
+
+            // Cerrar la sesion del usuario
+            setTimeout(() => {
+                localStorage.removeItem('AUTH_TOKEN');
+                logout();
+            }, 3000);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <KioscoContext.Provider
@@ -105,7 +137,8 @@ const KioscoProvider = ({children}) => {
                 handleAgregarPedido,
                 handleEditarCantidad,
                 handleEliminarProductoPedido,
-                total
+                total,
+                handleSubmitNuevaOrden
             }}
         >{children}</KioscoContext.Provider>
     )
