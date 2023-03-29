@@ -15,12 +15,17 @@ export default function Inicio() {
 
     // Para debugear que trae el servicio
     // const fetcher = () => clienteAxios('/api/productos').then(data => { console.log(data); })
+    const token = localStorage.getItem('AUTH_TOKEN');
     // Consulta SWR
-    const fetcher = () => clienteAxios('/api/productos').then(data => data.data)
-    const { data, error, isLoading } = useSWR('/api/productos', fetcher)
-    // const { data, error, isLoading } = useSWR('/api/productos', fetcher,{
-    //     refreshInterval: 7000
-    // })
+    const fetcher = () => clienteAxios('/api/productos',{
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }).then(data => data.data)
+    // const { data, error, isLoading } = useSWR('/api/productos', fetcher)
+    const { data, error, isLoading } = useSWR('/api/productos', fetcher,{
+        refreshInterval: 3000
+    })
     
     // console.log(data);
     // console.log(error);
@@ -50,11 +55,13 @@ export default function Inicio() {
         <p className=' text-xl my-4'>
             Elije y personaliza tu pedido a continuación.
         </p>
+
         <div className='grid gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-3'>
             { productos.map( producto => (
                 <Producto 
                     key={producto.imagen}
                     producto={producto}
+                    btnAgregar={true}
                 />
             ))}
         </div>

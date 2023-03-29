@@ -2,12 +2,12 @@ import React from 'react'
 import { formatearDinero  } from "../helpers";
 import useKiosco from '../hooks/useKiosco';
 
-export default function Producto({producto}) {
+export default function Producto({producto, btnAgregar=false, btnDisponible=false}) {
     // console.log(producto);
     const {nombre,imagen, precio} = producto
 
     // creamos para llamar la funcion que modifique el state
-    const { handleClickModal, handleSetProducto } = useKiosco();
+    const { handleClickModal, handleSetProducto, handleClickProductoAgotado } = useKiosco();
 
     return (
         <div className='border p-3 shadow bg-white'>
@@ -21,16 +21,31 @@ export default function Producto({producto}) {
                 <p className='mt-5 font-black text-3xl text-amber-500'>
                     { formatearDinero(precio) }
                 </p>
-                <button 
-                    type='button'
-                    className=' bg-indigo-600 hover:bg-indigo-800 text-white w-full mt-5 p-3 uppercase font-bold'
-                    onClick={ () => {
-                        handleClickModal();
-                        handleSetProducto(producto);
-                    }}
-                >
+
+
+                { btnAgregar && (
+                    <button 
+                        type='button'
+                        className=' bg-indigo-600 hover:bg-indigo-800 text-white w-full mt-5 p-3 uppercase font-bold'
+                        onClick={ () => {
+                            handleClickModal();
+                            handleSetProducto(producto);
+                        }}
+                    >
                         Agregar
-                </button>
+                    </button>
+                )}
+
+                { btnDisponible && (
+                    <button 
+                        type='button'
+                        className=' bg-indigo-600 hover:bg-indigo-800 text-white w-full mt-5 p-3 uppercase font-bold'
+                        onClick={ () => handleClickProductoAgotado(producto.id) }
+                    >
+                        Producto Agotado
+                    </button>
+                )}
+
             </div>   
         </div>
     )

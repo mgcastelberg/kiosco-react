@@ -22,7 +22,7 @@ export default function Resumen() {
       </h1>
       <p className='my-5'>
         Aqui podras ver el resumen y totales de tu pedido
-      </p>
+      </p>      
 
       <div className='py-3'>
         {pedido.length === 0 ? (

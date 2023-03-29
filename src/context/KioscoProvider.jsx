@@ -31,7 +31,12 @@ const KioscoProvider = ({children}) => {
 
     const obtenerCategorias = async () => {
         try {
-            const { data } = await clienteAxios('/api/categorias');
+            const token = localStorage.getItem('AUTH_TOKEN');
+            const { data } = await clienteAxios('/api/categorias', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             // console.log(data.data);
             setCategorias(data.data);
             setCategoriaActual(data.data[0])
@@ -123,6 +128,34 @@ const KioscoProvider = ({children}) => {
         }
     }
 
+    const handleClickCompletarPedido = async id => {
+        // console.log(id);
+        const token = localStorage.getItem('AUTH_TOKEN');
+        try {
+            await clienteAxios.put(`/api/pedidos/${id}`, null, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleClickProductoAgotado = async id => {
+        // console.log(id);
+        const token = localStorage.getItem('AUTH_TOKEN');
+        try {
+            await clienteAxios.put(`/api/productos/${id}`, null, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return (
         <KioscoContext.Provider
             value={{
@@ -138,7 +171,9 @@ const KioscoProvider = ({children}) => {
                 handleEditarCantidad,
                 handleEliminarProductoPedido,
                 total,
-                handleSubmitNuevaOrden
+                handleSubmitNuevaOrden,
+                handleClickCompletarPedido,
+                handleClickProductoAgotado
             }}
         >{children}</KioscoContext.Provider>
     )

@@ -23,16 +23,6 @@ export const useAuth = ({middleware, url}) => {
     // console.log(user);
     // console.log(error);
 
-    useEffect(() => {
-        if(middleware === 'guest' && url && user){
-            navigate(url)
-        }
-        console.log(middleware);
-        if(middleware === 'auth' && !user){
-            navigate('/auth/login')
-        }
-    }, [user, error])
-
     const login = async(datos, setErrores) => {
         try {
             const { data } = await clienteAxios.post('/api/login', datos)
@@ -73,6 +63,23 @@ export const useAuth = ({middleware, url}) => {
             throw Error(error?.response?.data?.error)
         }
     }
+
+    useEffect(() => {
+        if(middleware === 'guest' && url && user){
+            navigate(url)
+        }
+        if(middleware === 'guest' && user && user.admin){
+            navigate('/admin')
+        }
+        if(middleware === 'admin' && user && !user.admin){
+            navigate('/')
+        }
+        if(middleware === 'auth' && error){
+            navigate('/auth/login')
+        }
+    }, [user, error])
+
+    // console.log(user);
 
     return {
         login,
